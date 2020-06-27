@@ -4,6 +4,7 @@ tokens = (
     "CONE",
     "CYLINDER",
     "PYRAMID",
+    "TRIANGULARPRISM",
     "STRING",
     "ID",
     "XYZ",
@@ -48,6 +49,7 @@ reserved = {
     "cone" : "CONE", 
     "cylinder" : "CYLINDER",
     "pyramid" : "PYRAMID",
+    "triangularprism" : "TRIANGULARPRISM",
     "x" : "XYZ", 
     "y" : "XYZ", 
     "z" : "XYZ", 
@@ -200,6 +202,23 @@ def p_command_pyramid(p):
     if len(p) == 9 and isinstance(p[8], str):
         cmd['cs'] = p[8]
     cmd['args'] = p[arg_start:arg_start+5]
+    commands.append(cmd)
+
+def p_command_triangularprism(p):
+    """command : TRIANGULARPRISM NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER
+               | TRIANGULARPRISM NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER SYMBOL
+               | TRIANGULARPRISM SYMBOL NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER
+               | TRIANGULARPRISM SYMBOL NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER SYMBOL"""
+    cmd = {'op' : p[1], 'constants' : None, 'cs' : None, 'args':[]}
+    arg_start = 2
+    if isinstance(p[2], str):
+        cmd['constants'] = p[2]
+        arg_start = 3
+    if len(p) == 8 and isinstance(p[7], str):
+        cmd['cs'] = p[7]
+    if len(p) == 9 and isinstance(p[8], str):
+          cmd['cs'] = p[8]
+    cmd['args'] = p[arg_start:arg_start+6]
     commands.append(cmd)
 
 def p_command_cylinder(p):
@@ -415,7 +434,6 @@ def p_save_coords(p):
     cmd = {'op':p[1], 'args':None, 'cs':p[2]}
     symbols[p[2]] = ['coord_sys', []]
     commands.append(cmd)
-
 
 def p_tween(p):
     "command : TWEEN NUMBER NUMBER SYMBOL SYMBOL"

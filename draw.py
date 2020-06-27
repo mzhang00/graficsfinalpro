@@ -311,6 +311,16 @@ def add_cylinder(polygons, cx, cy, cz, r, height, step):
         add_polygon(polygons, x1, cy - height, z1, x2, cy - height, z2, cx, cy - height, cz)
         add_polygon(polygons, x1, cy, z1, cx, cy, cz, x2, cy, z2)
 
+def add_triangularprism(polygons, x0, y0, z0, x1, y1, z1):
+    add_polygon(polygons, x0, y0, z0, x0 + x1, y0, z0, x0, y0 + y1, z0)
+    add_polygon(polygons, x0, y0, z0 + zl, x0, y0 + yl, z0 + zl, x0 + xl, y0, z0 + zl)
+    add_polygon(polygons, x0, y0, z0, x0, y0 + yl, z0, x0, y0 + yl, z0 + zl)
+    add_polygon(polygons, x0, y0, z0, x0, y0 + yl, z0 + zl, x0, y0, z0 + zl)
+    add_polygon(polygons, x0, y0 + yl, z0, x0 + xl, y0, z0, x0, y0 + yl, z0 + zl)
+    add_polygon(polygons, x0 + xl, y0, z0, x0 + xl, y0, x0 + zl, x0, y0 + yl, z0 + zl)
+    add_polygon(polygons, x0, y0, z0, x0, y0, z0 + zl, x0 + xl, y0, z0)
+    add_polygon(polygons, x0 + xl, y0, z0, x0, y0, z0 + zl, x0 + xl, y0, z0 + zl)    
+
 def generate_torus( cx, cy, cz, r0, r1, step ):
     points = []
     rot_start = 0

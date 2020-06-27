@@ -97,7 +97,6 @@ class NullLogger(object):
     def __call__(self, *args, **kwargs):
         return self
 
-
 # -----------------------------------------------------------------------------
 #                        === Lexing Engine ===
 #
