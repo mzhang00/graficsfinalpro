@@ -262,6 +262,8 @@ def run(filename):
                 stack.append([x[:] for x in stack[-1]] )
             elif c == 'pop':
                 stack.pop()
+            elif c == 'save_coord_system':
+                symbols[command['cs']] = stack[-1]
             elif c == 'display':
                 display(screen)
             elif c == 'save':
@@ -271,6 +273,7 @@ def run(filename):
             fname = 'anim/%s%03d.png'%(name, f)
             print('Saving frame: '  + fname)
             save_extension(screen, fname)
+        print(symbols)
         # end fromes loop
     if num_frames > 1:
         make_animation(name)
