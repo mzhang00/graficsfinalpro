@@ -162,7 +162,10 @@ def run(filename):
                 add_box(tmp,
                         args[0], args[1], args[2],
                         args[3], args[4], args[5])
-                matrix_mult( stack[-1], tmp )
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
                 reflect = '.white'
@@ -171,7 +174,10 @@ def run(filename):
                     reflect = command['constants']
                 add_sphere(tmp,
                            args[0], args[1], args[2], args[3], step_3d)
-                matrix_mult( stack[-1], tmp )
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
                 reflect = '.white'
@@ -180,7 +186,10 @@ def run(filename):
                     reflect = command['constants']
                 add_cone(tmp,
                             args[0], args[1], args[2], args[3], args[4], step_3d)
-                matrix_mult( stack[-1], tmp )
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
                 reflect = '.white'
@@ -189,7 +198,10 @@ def run(filename):
                     reflect = command['constants']
                 add_pyramid(tmp,
                             args[0], args[1], args[2], args[3], args[4])
-                matrix_mult( stack[-1], tmp )
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
                 reflect = '.white'
@@ -198,7 +210,10 @@ def run(filename):
                     reflect = command['constants']
                 add_pyramid(tmp,
                             args[0], args[1], args[2], args[3], args[4], step_3d)
-                matrix_mult( stack[-1], tmp )
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
                 reflect = '.white'
@@ -207,7 +222,10 @@ def run(filename):
                     reflect = command['constants']
                 add_triangularprism(tmp,
                             args[0], args[1], args[2], args[3], args[4], args[5])
-                matrix_mult( stack[-1], tmp )
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
                 reflect = '.white'
@@ -216,14 +234,20 @@ def run(filename):
                     reflect = command['constants']
                 add_torus(tmp,
                           args[0], args[1], args[2], args[3], args[4], step_3d)
-                matrix_mult( stack[-1], tmp )
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
                 reflect = '.white'
             elif c == 'line':
                 add_edge(tmp,
                          args[0], args[1], args[2], args[3], args[4], args[5])
-                matrix_mult( stack[-1], tmp )
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 draw_lines(tmp, screen, zbuffer, color)
                 tmp = []
             elif c == 'move':
@@ -250,20 +274,29 @@ def run(filename):
                     tmp = make_rotY(theta)
                 else:
                     tmp = make_rotZ(theta)
-                matrix_mult( stack[-1], tmp )
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 stack[-1] = [ x[:] for x in tmp]
                 tmp = []
             elif c == 'mesh':
-                mesh(tmp, args[0])
-                matrix_mult( stack[-1], tmp )
+                if command['constants']:
+                    reflect = command['constants']
+                add_mesh(tmp, args[0])
+                if command['cs']:
+                    matrix_mult(symbols[command['cs']][1], tmp)
+                else:
+                    matrix_mult(stack[-1], tmp)
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
+                reflect = '.white'
             elif c == 'push':
                 stack.append([x[:] for x in stack[-1]] )
             elif c == 'pop':
                 stack.pop()
             elif c == 'save_coord_system':
-                symbols[command['cs']] = stack[-1]
+                symbols[command['cs']][1] = stack[-1]
             elif c == 'display':
                 display(screen)
             elif c == 'save':
@@ -273,7 +306,6 @@ def run(filename):
             fname = 'anim/%s%03d.png'%(name, f)
             print('Saving frame: '  + fname)
             save_extension(screen, fname)
-        print(symbols)
         # end fromes loop
     if num_frames > 1:
         make_animation(name)
